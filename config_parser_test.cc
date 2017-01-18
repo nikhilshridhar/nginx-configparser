@@ -40,6 +40,13 @@ TEST_F(NginxStringConfigTest, AnotherSimpleConfig) {
 	EXPECT_EQ("bar", out_config_.statements_[0]->tokens_[1]);
 }
 
+TEST_F(NginxStringConfigTest, AnotherAnotherSimpleConfig) {
+	EXPECT_TRUE(ParseString("server { listen 80; }"));
+	EXPECT_EQ(1, out_config_.statements_.size())
+		<< "Config has one statements";
+	EXPECT_EQ("server", out_config_.statements_[0]->tokens_[0]);
+}
+
 TEST_F(NginxStringConfigTest, EmptyConfig) {
     EXPECT_FALSE(ParseString(";"));
     EXPECT_FALSE(ParseString(""));
@@ -53,6 +60,6 @@ TEST_F(NginxStringConfigTest, InvalidConfigStatement) {
 
 TEST_F(NginxStringConfigTest, NestedConfigStatement) {
 	EXPECT_FALSE(ParseString("server { listen 80; "));
-	EXPECT_EQ(1, out_config_.statements_.size()) << "Config has one statement";
-	EXPECT_EQ("server", out_config_.statements_[0]->tokens_[0]);
+	EXPECT_FALSE(ParseString("server {{ listen 80; }"));
+	EXPECT_TRUE(ParseString("server { listen 80; }"));
 }

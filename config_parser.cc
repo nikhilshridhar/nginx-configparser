@@ -215,7 +215,8 @@ bool NginxConfigParser::Parse(std::istream* config_file, NginxConfig* config) {
         break;
       }
       if (braceCount != 0) {
-        return false;
+        // Error. Unbalanced curly braces
+        break;
       }
       return true;
     } else {
